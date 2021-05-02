@@ -1,1 +1,16 @@
 https://serverless-stack.com/#table-of-contents
+
+serverless invoke local --function create --path mocks/create-event.json
+
+
+// If you have multiple profiles for your AWS SDK credentials, you will need to explicitly pick one. 
+// Use the following command instead:
+AWS_PROFILE=myProfile serverless invoke local --function create --path mocks/create-event.json
+
+----------------------------------------------------------------------------------------------------------
+  POST - https://rdxrtjxoqi.execute-api.us-east-1.amazonaws.com/prod/notes
+  GET - https://rdxrtjxoqi.execute-api.us-east-1.amazonaws.com/prod/notes/{id}
+  GET - https://rdxrtjxoqi.execute-api.us-east-1.amazonaws.com/prod/notes
+  PUT - https://rdxrtjxoqi.execute-api.us-east-1.amazonaws.com/prod/notes/{id}
+  DELETE - https://rdxrtjxoqi.execute-api.us-east-1.amazonaws.com/prod/notes/{id}
+----------------------------------------------------------------------------------------------------------

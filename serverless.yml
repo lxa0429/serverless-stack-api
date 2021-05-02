@@ -1,5 +1,6 @@
 # NOTE: update this with your service name
 service: notes-api
+useDotenv: true
 
 # Create an optimized package for our functions 
 package:
@@ -16,10 +17,61 @@ provider:
   stage: prod
   region: us-east-1
 
+  # These environment variables are made available to our functions
+  # under process.env.
+  environment:
+    tableName: ${env:TABLENAME}
+
+  # 'iamRoleStatements' defines the permission policy for the Lambda function.
+  # In this case Lambda functions are granted with permissions to access DynamoDB.
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
 functions:
-  hello:
-    handler: handler.hello
+  create:
+    handler: create.main
     events:
       - http:
-          path: hello
+          path: notes
+          method: post
+
+  get:
+    handler: get.main
+    events:
+      - http:
+          path: notes/{id}
           method: get
+  list:
+    handler: list.main
+    events:
+      - http:
+          path: notes
+          method: get
+  update:
+    # Defines an HTTP API endpoint that calls the main function in update.js
+    # - path: url path is /notes/{id}
+    # - method: PUT request
+    handler: update.main
+    events:
+      - http:
+          path: notes/{id}
+          method: put
+  delete:
+    # Defines an HTTP API endpoint that calls the main function in delete.js
+    # - path: url path is /notes/{id}
+    # - method: DELETE request
+    handler: delete.main
+    events:
+      - http:
+          path: notes/{id}
+          method: delete
+          
